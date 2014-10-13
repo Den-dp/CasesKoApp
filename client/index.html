@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>CasesKoApp</title>
+    <script src="lib/jquery/dist/jquery.js"></script>
+    <script src="lib/knockout/dist/knockout.js"></script>
+    <script src="lib/sammy/lib/sammy.js"></script>
+    <script src="SalesForceCasesViewModel.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="cases row">
+        <div class="col-sm-3 col-md-3 col-lg-2">
+
+            <ul class="nav nav-tabs" data-bind="foreach: folders">
+                <li data-bind="css: { active: $data == $root.chosenFolderId() }">
+                    <a href="#" data-bind="click: $root.goToFolder, text: $data"></a>
+                </li>
+            </ul>
+
+            <!-- ko if: chosenFolderData().length -->
+            <ul class="cases-list nav nav-pills nav-stacked" data-bind="foreach: chosenFolderData">
+                <li data-bind="css: { active: $root.chosenCaseId() == $data.id }">
+                    <a href="" data-bind="text: subject, click: $root.goToCase"></a>
+                </li>
+            </ul>
+            <!-- /ko -->
+
+            <!-- ko ifnot: chosenFolderData().length -->
+            <p class="cases-empty">No cases available.</p>
+            <!-- /ko -->
+
+        </div>
+
+        <div class="col-sm-9 col-md-6 col-lg-6">
+
+            <div class="case-info" data-bind="with: chosenCaseData()">
+                <h2 data-bind="text: subject"></h2>
+                <p data-bind="text: description"></p>
+            </div>
+
+            <div class="case-conversation">
+
+                <div class="col-xs-9 comments" data-bind="foreach: chosenCaseComments">
+                    <div class="media">
+                        <img class="media-object pull-left"
+                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+"
+                             alt="...">
+
+                        <div class="media-body">
+                            <h4 class="media-heading" data-bind="text: user"></h4>
+                            <p data-bind="text: message"></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var config = {
+        getCasesUrl: '/api/cases',
+        getCaseDetailsUrl: '/api/cases/{{caseId}}',
+        getCaseCommentsUrl: '/api/cases/{{caseId}}/comments'
+    };
+    ko.applyBindings(new SalesForceCasesViewModel(config));
+</script>
+</body>
+</html>
