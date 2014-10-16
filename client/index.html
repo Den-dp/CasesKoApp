@@ -22,6 +22,7 @@
                 </li>
             </ul>
 
+            <!-- ko if: chosenFolderData.isLoaded() -->
             <!-- ko if: chosenFolderData().length -->
             <ul class="cases-list nav nav-pills nav-stacked" data-bind="foreach: chosenFolderData">
                 <li data-bind="css: { active: $root.chosenCaseId() == $data.id }">
@@ -33,10 +34,12 @@
             <!-- ko ifnot: chosenFolderData().length -->
             <p class="cases-empty">No cases available.</p>
             <!-- /ko -->
+            <!-- /ko -->
 
         </div>
 
         <div class="col-sm-9 col-md-6 col-lg-6">
+            <!-- ko if: chosenCaseId() -->
 
             <div class="case-info" data-bind="with: chosenCaseData()">
                 <h2 data-bind="text: subject"></h2>
@@ -44,6 +47,7 @@
             </div>
 
             <div class="case-conversation">
+                <!-- ko if: chosenCaseComments.isLoaded() -->
 
                 <div class="col-xs-9 comments" data-bind="foreach: chosenCaseComments">
                     <div class="media">
@@ -57,9 +61,11 @@
                         </div>
                     </div>
                 </div>
+                <!-- /ko -->
 
             </div>
 
+            <!-- /ko -->
         </div>
     </div>
 </div>
